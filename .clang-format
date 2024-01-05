@@ -1,0 +1,41 @@
+Language: Cpp
+
+IndentWidth: 4
+ColumnLimit: 90
+MaxEmptyLinesToKeep: 1
+AccessModifierOffset: 0
+
+AlignConsecutiveAssignments:  true
+AlignConsecutiveDeclarations: true
+AlignEscapedNewlines:  true
+AlignOperands:         true
+AlignTrailingComments: true
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeElse: true
+
+AlwaysBreakTemplateDeclarations: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+SortUsingDeclarations: true
+
+PointerAlignment:     Left
+SpaceAfterCStyleCast: true
+SpaceBeforeAssignmentOperators:   true
+AllowShortFunctionsOnASingleLine: Empty
+
+FixNamespaceComments: false
+NamespaceIndentation: All
+ReflowComments: true
+
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '^"(art)'
+    Priority:        1
+  - Regex:           '<[[:alnum:].]+>'
+    Priority:        4
+  - Regex:           '.*'
+    Priority:        3
+  - Regex:           'art*'
+    Priority:        2
