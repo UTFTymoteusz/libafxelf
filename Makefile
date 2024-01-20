@@ -28,7 +28,6 @@ CXXFLAGS := $(GFLAGS) $(CXXFLAGS)   \
 	$(INCLUDES)
 
 all: $(OBJS)
-	echo $(BUILD)
 	@$(AR) rcs -o $(BIN)$(NAME).a $(OBJS)
 	@printf '\033[0;$(COLOR)m%s\033[0m: Done building \033[0;$(COLOR)m%s\033[0m\033[0K\n' $(NAME)
 
