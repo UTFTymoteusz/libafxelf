@@ -34,8 +34,8 @@ namespace afx {
     }
 
     u32 endflip(u32 i) {
-        return ((i & 0xFF000000) >> 24) | ((i & 0x00FF0000) >> 8) | ((i & 0x0000FF00) << 8) |
-               ((i & 0x000000FF) << 24);
+        return ((i & 0xFF000000) >> 24) | ((i & 0x00FF0000) >> 8) |
+               ((i & 0x0000FF00) << 8) | ((i & 0x000000FF) << 24);
     }
 
     u64 endflip(u64 i) {
@@ -80,7 +80,8 @@ namespace afx {
     }
 
     bool elf_load(elf_t* elf, void* data,
-                  void* (*alloccb)(void* data, void* vaddr, usz size, int align, u32 flags),
+                  void* (*alloccb)(void* data, void* vaddr, usz size, int align,
+                                   u32 flags),
                   void* (*freecb)(void* data, void* vaddr)) {
         if (elf->loaded)
             return false;
@@ -89,8 +90,8 @@ namespace afx {
         bool   flip = elf->flip;
 
         for (u16 i = 0; i < in->phnum; i++) {
-            elf64phdr* phdr =
-                (elf64phdr*) ((u8*) elf->image + fl(in->phoff, flip) + i * fl(in->phentsize, flip));
+            elf64phdr* phdr = (elf64phdr*) ((u8*) elf->image + fl(in->phoff, flip) +
+                                            i * fl(in->phentsize, flip));
 
             alloccb(data, (void*) phdr->vaddr, phdr->memsz, phdr->align, phdr->flags);
         }
@@ -100,7 +101,8 @@ namespace afx {
     }
 
     bool elf_link(elf_t* elf, void* data, bool (*checkcb)(void* data, const char* name),
-                  void* (*alloccb)(void* data, void* vaddr, usz size, int align, u32 flags),
+                  void* (*alloccb)(void* data, void* vaddr, usz size, int align,
+                                   u32 flags),
                   void* (*linkcb)(void* data, const char* name, int flags)) {
         if (elf->loaded)
             return false;
@@ -115,8 +117,8 @@ namespace afx {
             if (!shvalid(i))
                 continue;
 
-            elf64shdr* shdr =
-                (elf64shdr*) ((u8*) elf->image + fl(in->shoff, flip) + i * fl(in->shentsize, flip));
+            elf64shdr* shdr = (elf64shdr*) ((u8*) elf->image + fl(in->shoff, flip) +
+                                            i * fl(in->shentsize, flip));
 
             if (!checkcb(data, strderef(elf, shdr->name)))
                 continue;
@@ -202,15 +204,17 @@ namespace afx {
         if (!inbounds(fl(in->phoff, flip), size) || !inbounds(fl(in->shoff, flip), size))
             return nullptr;
 
-        if (!inbounds(fl(in->phoff, flip), fl(in->phnum, flip) * fl(in->phentsize, flip), size))
+        if (!inbounds(fl(in->phoff, flip), fl(in->phnum, flip) * fl(in->phentsize, flip),
+                      size))
             return nullptr;
 
-        if (!inbounds(fl(in->shoff, flip), fl(in->shnum, flip) * fl(in->shentsize, flip), size))
+        if (!inbounds(fl(in->shoff, flip), fl(in->shnum, flip) * fl(in->shentsize, flip),
+                      size))
             return nullptr;
 
         for (u16 i = 0; i < in->phnum; i++) {
-            elf64phdr* phdr =
-                (elf64phdr*) ((u8*) ptr + fl(in->phoff, flip) + i * fl(in->phentsize, flip));
+            elf64phdr* phdr = (elf64phdr*) ((u8*) ptr + fl(in->phoff, flip) +
+                                            i * fl(in->phentsize, flip));
 
             if (!inbounds(fl(phdr->offset, flip), fl(phdr->filesz, flip), size))
                 return nullptr;
@@ -222,8 +226,8 @@ namespace afx {
         if (!shvalid(fl(in->shstrndx, flip)))
             return nullptr;
 
-        elf64shdr* strhdr =
-            (elf64shdr*) ((u8*) ptr + fl(in->shoff, flip) + in->shstrndx * fl(in->shentsize, flip));
+        elf64shdr* strhdr = (elf64shdr*) ((u8*) ptr + fl(in->shoff, flip) +
+                                          in->shstrndx * fl(in->shentsize, flip));
 
         if (!inbounds(fl(strhdr->offset, flip), fl(strhdr->size, flip), size))
             return nullptr;
@@ -232,8 +236,8 @@ namespace afx {
             if (!shvalid(i))
                 continue;
 
-            elf64shdr* shdr =
-                (elf64shdr*) ((u8*) ptr + fl(in->shoff, flip) + i * fl(in->shentsize, flip));
+            elf64shdr* shdr = (elf64shdr*) ((u8*) ptr + fl(in->shoff, flip) +
+                                            i * fl(in->shentsize, flip));
 
             if (!inbounds(fl(shdr->offset, flip), fl(shdr->size, flip), size))
                 return nullptr;
